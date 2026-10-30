@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Marketplace Advertisements</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f4f4f4;
+}
+
+header{
+    background:#0077ff;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    padding:20px;
+}
+
+.form-container{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.1);
+    margin-bottom:30px;
+}
+
+.form-container h2{
+    margin-bottom:15px;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+button{
+    background:#28a745;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    cursor:pointer;
+    border-radius:5px;
+    font-size:16px;
+}
+
+button:hover{
+    background:#218838;
+}
+
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 5px 10px rgba(0,0,0,.1);
+}
+
+.card img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+}
+
+.card-content{
+    padding:15px;
+}
+
+.category{
+    display:inline-block;
+    background:#007bff;
+    color:white;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:12px;
+    margin-bottom:10px;
+}
+
+.price{
+    color:green;
+    font-size:22px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.location{
+    color:#666;
+    margin-top:5px;
+    font-size:14px;
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    background:#222;
+    color:white;
+    margin-top:30px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🛒 My Advertisement Marketplace</h1>
+<p>Cosmetics • Electronics • Household Items</p>
+</header>
+
+<div class="container">
+
+<div class="form-container">
+
+<h2>Post New Advertisement</h2>
+
+<form id="adForm">
+
+<input type="text" id="title" placeholder="Product Name" required>
+
+<select id="category">
+<option>Cosmetics</option>
+<option>Electronics</option>
+<option>Household Items</option>
+</select>
+
+<textarea id="description" rows="4" placeholder="Product Description"></textarea>
+
+<input type="number" id="price" placeholder="Price" required>
+
+<input type="text" id="location" placeholder="Location" required>
+
+<input type="file" id="image" accept="image/*">
+
+<button type="submit">Post Advertisement</button>
+
+</form>
+
+</div>
+
+<h2>Available Advertisements</h2>
+<br>
+
+<div class="products" id="products"></div>
+
+</div>
+
+<div class="footer">
+© 2026 Marketplace Advertisement System
+</div>
+
+<script>
+
+let products = [
+{
+title:"Face Cream",
+category:"Cosmetics",
+description:"Premium beauty cream",
+price:"15",
+location:"Nairobi",
+image:"https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=500"
+},
+{
+title:"Samsung TV",
+category:"Electronics",
+description:"43 inch Smart TV",
+price:"350",
+location:"Mombasa",
+image:"https://images.unsplash.com/photo-1593784991095-a205069470b6?w=500"
+},
+{
+title:"Dining Table",
+category:"Household Items",
+description:"6-seater wooden dining table",
+price:"250",
+location:"Kisumu",
+image:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=500"
+}
+];
+
+function displayProducts(){
+
+const container = document.getElementById("products");
+
+container.innerHTML = "";
+
+products.forEach(product=>{
+
+container.innerHTML += `
+<div class="card">
+
+<img src="${product.image}" alt="Product">
+
+<div class="card-content">
+
+<span class="category">${product.category}</span>
+
+<h3>${product.title}</h3>
+
+<p>${product.description}</p>
+
+<div class="price">$${product.price}</div>
+
+<div class="location">📍 ${product.location}</div>
+
+</div>
+
+</div>
+`;
+
+});
+
+}
+
+displayProducts();
+
+document.getElementById("adForm").addEventListener("submit", function(e){
+
+e.preventDefault();
+
+const title = document.getElementById("title").value;
+const category = document.getElementById("category").value;
+const description = document.getElementById("description").value;
+const price = document.getElementById("price").value;
+const location = document.getElementById("location").value;
+
+const imageFile = document.getElementById("image").files[0];
+
+if(imageFile){
+
+const reader = new FileReader();
+
+reader.onload = function(event){
+
+products.unshift({
+title,
+category,
+description,
+price,
+location,
+image:event.target.result
+});
+
+displayProducts();
+
+document.getElementById("adForm").reset();
+
+};
+
+reader.readAsDataURL(imageFile);
+
+}else{
+
+products.unshift({
+title,
+category,
+description,
+price,
+location,
+image:"https://via.placeholder.com/500x300?text=No+Image"
+});
+
+displayProducts();
+
+document.getElementById("adForm").reset();
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
